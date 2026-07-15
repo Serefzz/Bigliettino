@@ -56,7 +56,17 @@ document.addEventListener("DOMContentLoaded", () => {
         recognition.continuous = true;
         recognition.interimResults = true;
 
+        const SpeechGrammarList = window.SpeechGrammarList || window.webkitSpeechGrammarList;
+        if (SpeechGrammarList) {
+            const speechRecognitionList = new SpeechGrammarList();
+            const grammar = '#JSGF V1.0; grammar pu; public <pu> = pu | pù | poo | può | po | puh ;';
+            speechRecognitionList.addFromString(grammar, 1);
+            recognition.grammars = speechRecognitionList;
+        }
+
         let recognitionStarted = false;
+        let lastPuTime = 0;
+        let lastTouchTime = 0;
 
         // Avviamo il microfono appena si entra nella pagina
         try {
@@ -66,21 +76,28 @@ document.addEventListener("DOMContentLoaded", () => {
 
         const evaluateAndOpen = () => {
             if (isOpen) return;
-            try { recognition.stop(); } catch(e) {}
-            openEnvelope();
+            
+            const puIsValid = (Date.now() - lastPuTime) <= 4000;
+            const touchIsValid = (Date.now() - lastTouchTime) <= 1000;
+
+            if (puIsValid && touchIsValid) {
+                try { recognition.stop(); } catch (e) { }
+                openEnvelope();
+            }
         };
 
         const handleEnvelopeTouch = (e) => {
             if (isOpen) return;
-            
+            lastTouchTime = Date.now();
+
             // Sblocco audio per dispositivi mobili (iOS/Android bloccano l'audio se non avviato con un tocco)
             if (audio.paused) {
                 audio.volume = 0;
                 audio.play().then(() => {
                     audio.pause();
-                }).catch(() => {});
+                }).catch(() => { });
             }
-            
+
             // Avviamo il microfono se si è spento
             if (!recognitionStarted) {
                 try {
@@ -88,6 +105,8 @@ document.addEventListener("DOMContentLoaded", () => {
                     recognitionStarted = true;
                 } catch (err) { }
             }
+
+            evaluateAndOpen();
         };
 
         wrapper.addEventListener("mousedown", handleEnvelopeTouch);
@@ -101,17 +120,22 @@ document.addEventListener("DOMContentLoaded", () => {
 
         recognition.onresult = (event) => {
             if (isOpen) return;
-            
-            // Prendiamo solo l'ultima frase detta
-            let transcript = event.results[event.results.length - 1][0].transcript.toLowerCase();
-            
-            // Allow some phonetic variations of "pu"
-            if (transcript.includes('pu') || transcript.includes('pù') || transcript.includes('poo') || transcript.includes('bu') || transcript.includes('tu')) {
+
+            // Uniamo tutte le frasi dette finora (se vuoi cercare in tutto lo storico)
+            let transcript = Array.from(event.results)
+                .map(result => result[0].transcript)
+                .join('|')
+                .toLowerCase();
+
+            // Ampliamo le variazioni fonetiche (il browser spesso capisce "può", "po", "più", "fu", "su")
+            const validSounds = ['pu', 'pù', 'poo', 'bu', 'tu', 'può', 'po', "po'", 'più', 'puh', 'boh', 'bù', 'fu', 'su', 'uh'];
+            if (validSounds.some(sound => transcript.includes(sound))) {
+                lastPuTime = Date.now();
                 evaluateAndOpen();
             }
         };
 
-        instruction.innerText = "Di' 'pu' per aprire la busta!";
+        instruction.innerText = "Di' 'pu' e tocca la busta!";
     } else {
         // Fallback se il browser non supporta il riconoscimento vocale
         instruction.innerText = "Tocca la busta per aprirla";
