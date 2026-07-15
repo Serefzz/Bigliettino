@@ -276,8 +276,8 @@ body {
 }
 
 .envelope-wrapper.open .letter {
-    transform: translateZ(20px) translateY(-206px) scale(1.2);
-    height: 577px;
+    transform: translateZ(20px) translateY(-206px) scale(1.05);
+    height: 660px;
     box-shadow: 0 30px 60px rgba(0, 0, 0, 0.3);
     cursor: default;
 }
