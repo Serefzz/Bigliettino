@@ -57,25 +57,21 @@ document.addEventListener("DOMContentLoaded", () => {
         recognition.interimResults = true;
 
         let recognitionStarted = false;
-        let lastPuTime = 0;
-        let hasBeenTouched = false;
+
+        // Avviamo il microfono appena si entra nella pagina
+        try {
+            recognition.start();
+            recognitionStarted = true;
+        } catch (err) { }
 
         const evaluateAndOpen = () => {
             if (isOpen) return;
-            // Controlla se 'pu' è stato detto negli ultimi 4 secondi
-            const hasSaidPuRecently = (Date.now() - lastPuTime) <= 4000;
-            
-            // Una volta che la busta è stata toccata (per attivare il microfono),
-            // basterà solo dire "pu" per aprirla in qualsiasi momento.
-            if (hasBeenTouched && hasSaidPuRecently) {
-                try { recognition.stop(); } catch(e) {}
-                openEnvelope();
-            }
+            try { recognition.stop(); } catch(e) {}
+            openEnvelope();
         };
 
         const handleEnvelopeTouch = (e) => {
             if (isOpen) return;
-            hasBeenTouched = true;
             
             // Sblocco audio per dispositivi mobili (iOS/Android bloccano l'audio se non avviato con un tocco)
             if (audio.paused) {
@@ -85,15 +81,13 @@ document.addEventListener("DOMContentLoaded", () => {
                 }).catch(() => {});
             }
             
-            // Avviamo il microfono solo la prima volta (o se si è spento da solo)
+            // Avviamo il microfono se si è spento
             if (!recognitionStarted) {
                 try {
                     recognition.start();
                     recognitionStarted = true;
                 } catch (err) { }
             }
-
-            evaluateAndOpen();
         };
 
         wrapper.addEventListener("mousedown", handleEnvelopeTouch);
@@ -113,12 +107,11 @@ document.addEventListener("DOMContentLoaded", () => {
             
             // Allow some phonetic variations of "pu"
             if (transcript.includes('pu') || transcript.includes('pù') || transcript.includes('poo') || transcript.includes('bu') || transcript.includes('tu')) {
-                lastPuTime = Date.now();
                 evaluateAndOpen();
             }
         };
 
-        instruction.innerText = "Di' 'pu' e tocca la busta!";
+        instruction.innerText = "Di' 'pu' per aprire la busta!";
     } else {
         // Fallback se il browser non supporta il riconoscimento vocale
         instruction.innerText = "Tocca la busta per aprirla";
