@@ -11,7 +11,7 @@ document.addEventListener("DOMContentLoaded", () => {
         // Invertito per far girare la busta verso il mouse
         const x = (e.pageX - window.innerWidth / 2) / 25;
         const y = -(e.pageY - window.innerHeight / 2) / 25;
-        scene.style.transform = `rotateY(${x}deg) rotateX(${y}deg)`;
+        scene.style.transform = `scale(var(--scene-scale, 1)) rotateY(${x}deg) rotateX(${y}deg)`;
     });
 
     // Voice recognition setup
@@ -45,7 +45,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         // Reset rotation to center the letter beautifully
         scene.style.transition = 'transform 1s cubic-bezier(0.2, 0.8, 0.2, 1)';
-        scene.style.transform = `rotateY(0deg) rotateX(0deg)`;
+        scene.style.transform = `scale(var(--scene-scale, 1)) rotateY(0deg) rotateX(0deg)`;
 
         createParticles();
     }

@@ -53,6 +53,8 @@ body {
     justify-content: center;
     align-items: center;
     transform-style: preserve-3d;
+    --scene-scale: 1;
+    transform: scale(var(--scene-scale));
 }
 
 .envelope-wrapper {
@@ -334,7 +336,8 @@ body {
 /* Adattamento per schermi piccoli (Smartphone) */
 @media (max-width: 600px) {
     .scene {
-        transform: scale(0.65);
+        --scene-scale: 0.65;
+        transform: scale(var(--scene-scale));
     }
     .instruction {
         font-size: 1rem;
@@ -343,12 +346,14 @@ body {
 
 @media (max-width: 400px) {
     .scene {
-        transform: scale(0.55);
+        --scene-scale: 0.55;
+        transform: scale(var(--scene-scale));
     }
 }
 
 @media (max-width: 350px) {
     .scene {
-        transform: scale(0.48);
+        --scene-scale: 0.48;
+        transform: scale(var(--scene-scale));
     }
 }
