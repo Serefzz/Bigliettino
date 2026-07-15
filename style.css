@@ -18,9 +18,10 @@ body {
 .instruction {
     position: absolute;
     top: 15%;
-    left: 0;
-    width: 100%;
+    left: 50%;
+    transform: translateX(-50%);
     text-align: center;
+    width: 90%;
     color: #fff;
     font-size: 1.2rem;
     letter-spacing: 2px;
@@ -36,12 +37,12 @@ body {
     0%,
     100% {
         opacity: 0.6;
-        transform: scale(1);
+        transform: translateX(-50%) scale(1);
     }
 
     50% {
         opacity: 1;
-        transform: scale(1.05);
+        transform: translateX(-50%) scale(1.05);
     }
 }
 
@@ -52,14 +53,6 @@ body {
     justify-content: center;
     align-items: center;
     transform-style: preserve-3d;
-}
-
-.scene-zoom {
-    transform: scale(var(--scene-scale, 1));
-    transform-style: preserve-3d;
-    display: flex;
-    justify-content: center;
-    align-items: center;
 }
 
 .envelope-wrapper {
@@ -339,9 +332,23 @@ body {
 }
 
 /* Adattamento per schermi piccoli (Smartphone) */
-@media (max-width: 500px) {
+@media (max-width: 600px) {
+    .scene {
+        transform: scale(0.65);
+    }
     .instruction {
         font-size: 1rem;
-        padding: 0 20px;
+    }
+}
+
+@media (max-width: 400px) {
+    .scene {
+        transform: scale(0.55);
+    }
+}
+
+@media (max-width: 350px) {
+    .scene {
+        transform: scale(0.48);
     }
 }

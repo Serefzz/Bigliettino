@@ -5,13 +5,6 @@ document.addEventListener("DOMContentLoaded", () => {
     const instruction = document.querySelector(".instruction");
     let isOpen = false;
 
-    function updateScale() {
-        const scale = Math.min(1, window.innerWidth / 520, window.innerHeight / 750);
-        document.documentElement.style.setProperty('--scene-scale', scale);
-    }
-    window.addEventListener('resize', updateScale);
-    updateScale();
-
     // 3D Parallax effect on mouse move
     document.addEventListener("mousemove", (e) => {
         if (isOpen) return; // Stop parallax when open
