@@ -1,0 +1,340 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background: radial-gradient(circle at center, #ff9eb5 0%, #ff6b95 100%);
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: 'Inter', sans-serif;
+    overflow: hidden;
+    perspective: 1200px;
+}
+
+.instruction {
+    position: absolute;
+    top: 15%;
+    color: #fff;
+    font-size: 1.2rem;
+    letter-spacing: 2px;
+    animation: pulse 2s infinite;
+    pointer-events: none;
+    z-index: 100;
+    text-shadow: 0 2px 5px rgba(200, 0, 50, 0.5);
+    font-weight: 600;
+}
+
+@keyframes pulse {
+
+    0%,
+    100% {
+        opacity: 0.6;
+        transform: scale(1);
+    }
+
+    50% {
+        opacity: 1;
+        transform: scale(1.05);
+    }
+}
+
+.scene {
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transform-style: preserve-3d;
+}
+
+.envelope-wrapper {
+    position: relative;
+    width: 440px;
+    height: 302px;
+    transform-style: preserve-3d;
+    cursor: pointer;
+    transition: transform 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.envelope-wrapper:not(.open):hover {
+    transform: scale(1.05) translateZ(20px);
+}
+
+.envelope {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    transform-style: preserve-3d;
+    animation: attentionBounce 3s cubic-bezier(0.28, 0.84, 0.42, 1) infinite;
+}
+
+.envelope-wrapper:hover .envelope,
+.envelope-wrapper:active .envelope,
+.envelope-wrapper.open .envelope {
+    animation: none;
+}
+
+@keyframes attentionBounce {
+
+    0%,
+    80%,
+    100% {
+        transform: translateY(0) rotateZ(0deg);
+    }
+
+    83% {
+        transform: translateY(-20px) rotateZ(-3deg);
+    }
+
+    86% {
+        transform: translateY(0px) rotateZ(3deg);
+    }
+
+    89% {
+        transform: translateY(-10px) rotateZ(-2deg);
+    }
+
+    92% {
+        transform: translateY(0px) rotateZ(2deg);
+    }
+
+    95% {
+        transform: translateY(-5px) rotateZ(-1deg);
+    }
+
+    98% {
+        transform: translateY(0px) rotateZ(0deg);
+    }
+}
+
+.back,
+.front-bottom,
+.front-left,
+.front-right,
+.flap {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border-radius: 6px;
+}
+
+.back {
+    background: #d8c5ad;
+    transform: translateZ(0px);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+}
+
+.letter {
+    position: absolute;
+    top: 13px;
+    left: 13px;
+    width: 412px;
+    height: 275px;
+    background-color: #fffdf9;
+    background-image: url('Cornice-lettera.png');
+    background-size: 164% 134%;
+    background-position: center;
+    background-repeat: no-repeat;
+    border-radius: 10px;
+    transform: translateZ(1px);
+    transition: all 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 28px 33px;
+    text-align: center;
+    box-shadow: 0 0 12px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    /* Nasconde il testo in eccesso quando il foglio è piccolo/nella busta */
+}
+
+.letter::before {
+    content: '';
+    display: none;
+}
+
+.letter .content {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: all 0.6s ease 0.4s;
+    pointer-events: none;
+    width: 100%;
+}
+
+.letter h1 {
+    font-family: 'Dancing Script', cursive;
+    color: #b54949;
+    font-size: 3rem;
+    margin-bottom: 13px;
+    text-align: center;
+}
+
+.letter-text p {
+    font-family: 'Dancing Script', cursive;
+    color: #555;
+    font-size: 1.26rem;
+    line-height: 1.4;
+    margin-bottom: 8px;
+}
+
+.letter-text .greeting {
+    text-align: left;
+}
+
+.letter-text .body-text {
+    text-align: justify;
+    margin-bottom: 15px;
+}
+
+.letter-text .closing {
+    text-align: right;
+    margin-top: 10px;
+}
+
+.letter-text .sender {
+    font-size: 1.45rem;
+    font-weight: bold;
+}
+
+.front-left {
+    background: #e4d2bc;
+    clip-path: polygon(0 0, 50% 50%, 0 100%);
+    transform: translateZ(2px);
+}
+
+.front-right {
+    background: #e4d2bc;
+    clip-path: polygon(100% 0, 100% 100%, 50% 50%);
+    transform: translateZ(2px);
+}
+
+.front-bottom {
+    background: #ebd8c2;
+    clip-path: polygon(0 100%, 50% 50%, 100% 100%);
+    transform: translateZ(3px);
+}
+
+.flap-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    transform-origin: top;
+    transform: translateZ(4px) rotateX(0deg);
+    transition: transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
+    z-index: 4;
+}
+
+.flap-shape {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: #dfcdb5;
+    clip-path: polygon(0 0, 100% 0, 50% 55%);
+    background-image: linear-gradient(to bottom, rgba(255, 255, 255, 0.1), rgba(0, 0, 0, 0.05));
+}
+
+.heart-seal {
+    position: absolute;
+    top: 55%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 55px;
+    height: 55px;
+    background: #e63946;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    font-size: 27px;
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.3), inset 0 -2px 5px rgba(0, 0, 0, 0.3);
+    z-index: 5;
+}
+
+.envelope-wrapper.open {
+    transform: translateY(55px);
+    cursor: default;
+}
+
+.envelope-wrapper.open .flap-container {
+    transform: translateZ(4px) rotateX(180deg);
+    z-index: -1;
+}
+
+.envelope-wrapper.open .letter {
+    transform: translateZ(20px) translateY(-206px) scale(1.2);
+    height: 577px;
+    box-shadow: 0 30px 60px rgba(0, 0, 0, 0.3);
+    cursor: default;
+}
+
+.envelope-wrapper.open .letter .content {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+}
+
+.envelope-wrapper.open .front-bottom,
+.envelope-wrapper.open .front-left,
+.envelope-wrapper.open .front-right {
+    transform: translateZ(5px);
+}
+
+#particles {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 0;
+}
+
+/* Background hearts */
+.bg-heart {
+    position: absolute;
+    bottom: -10vh;
+    color: rgba(255, 255, 255, 0.4);
+    animation: floatUp linear infinite;
+    z-index: 0;
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+    pointer-events: none;
+}
+
+@keyframes floatUp {
+    0% {
+        transform: translateY(0) rotate(0deg) scale(1);
+        opacity: 0;
+    }
+
+    10% {
+        opacity: 1;
+    }
+
+    90% {
+        opacity: 1;
+    }
+
+    100% {
+        transform: translateY(-120vh) rotate(360deg) scale(1.5);
+        opacity: 0;
+    }
+}
+
+/* Adattamento per schermi piccoli (Smartphone) */
+@media (max-width: 500px) {
+    .scene {
+        transform: scale(0.75);
+    }
+    .instruction {
+        font-size: 1rem;
+        text-align: center;
+        padding: 0 20px;
+    }
+}
