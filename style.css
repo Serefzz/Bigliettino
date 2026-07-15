@@ -18,6 +18,9 @@ body {
 .instruction {
     position: absolute;
     top: 15%;
+    left: 0;
+    width: 100%;
+    text-align: center;
     color: #fff;
     font-size: 1.2rem;
     letter-spacing: 2px;
@@ -49,6 +52,14 @@ body {
     justify-content: center;
     align-items: center;
     transform-style: preserve-3d;
+}
+
+.scene-zoom {
+    transform: scale(var(--scene-scale, 1));
+    transform-style: preserve-3d;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .envelope-wrapper {
@@ -329,12 +340,8 @@ body {
 
 /* Adattamento per schermi piccoli (Smartphone) */
 @media (max-width: 500px) {
-    .scene {
-        transform: scale(0.75);
-    }
     .instruction {
         font-size: 1rem;
-        text-align: center;
         padding: 0 20px;
     }
 }
